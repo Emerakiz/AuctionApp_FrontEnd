@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
 
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,6 +25,7 @@ const Navbar = () => {
             {user.isAdmin && (
               <li><NavLink to='/admin' onClick={() => setMenuOpen(false)}>Admin</NavLink></li>
             )}
+            <li><NavLink to='/update-account' onClick={() => setMenuOpen(false)}>My Account</NavLink></li>
             <li className='navbar-username'>Hi, {user.username}</li>
             <li><button className='btn-danger' onClick={logout}>Logout</button></li>
           </>

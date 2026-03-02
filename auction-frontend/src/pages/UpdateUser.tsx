@@ -22,11 +22,11 @@ const UpdateUser = () => {
     return null;
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -57,12 +57,30 @@ const UpdateUser = () => {
       });
       setSuccess('Your account has been updated successfully!');
       setFormData({ email: '', password: '', confirmPassword: '' });
-    } catch (err) {
-      setError(err.response?.data || 'Failed to update account');
-    } finally {
-      setLoading(false);
-    }
-  };
+    }catch (err) {
+        console.error(err);
+
+        const error = err as {
+          response?: { data?: unknown };
+        };
+
+        const data = error.response?.data;
+
+        if (typeof data === 'string') {
+          setError(data);
+        } else if (data && typeof data === 'object') {
+          setError(
+            (data as { message?: string }).message ||
+            'Failed to update account'
+          );
+        } else {
+          setError('Failed to update account');
+        }
+
+      } finally {
+        setLoading(false);
+      }
+   };
 
   return (
     <div className='container'>
@@ -118,26 +136,28 @@ const UpdateUser = () => {
               </div>
             </div>
 
-            <div className='form-buttons'>
+            <form className='form' onSubmit={handleSubmit}>
               <button
                 className='btn-secondary'
+                type='button'
                 onClick={() => navigate('/')}
               >
                 Cancel
               </button>
               <button
+                type="submit"
                 className='btn-primary'
-                onClick={handleSubmit}
                 disabled={loading}
               >
                 {loading ? 'Saving...' : 'Save Changes'}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default UpdateUser;

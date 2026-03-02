@@ -7,9 +7,9 @@
 .tab-btn {
   padding: 0.6rem 1.5rem;
   border-radius: 8px;
-  border: 2px solid #1e293b;
+  border: 2px solid #35162e;
   background-color: white;
-  color: #1e293b;
+  color: #35162e;
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: bold;
@@ -17,12 +17,12 @@
 }
 
 .tab-btn.active {
-  background-color: #1e293b;
+  background-color: #35162e;
   color: white;
 }
 
 .tab-btn:hover {
-  background-color: #1e293b;
+  background-color: #35162e;
   color: white;
 }
 
@@ -45,7 +45,7 @@
 .admin-table td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #f1f5f9;
-  color: #1e293b;
+  color: #35162e;
   vertical-align: middle;
 }
 
@@ -59,7 +59,7 @@
 
 .table-link {
   cursor: pointer;
-  color: #1e293b;
+  color: #35162e;
   font-weight: bold;
   text-decoration: underline;
 }

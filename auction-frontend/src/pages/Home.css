@@ -30,7 +30,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #1e293b;
+  border-color: #35162e;
 }
 
 .search-btn {
@@ -47,21 +47,21 @@
 .filter-btn {
   padding: 0.4rem 1rem;
   border-radius: 20px;
-  border: 2px solid #1e293b;
+  border: 2px solid #35162e;
   background-color: white;
-  color: #1e293b;
+  color: #35162e;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.2s;
 }
 
 .filter-btn.active {
-  background-color: #1e293b;
+  background-color: #35162e;
   color: white;
 }
 
 .filter-btn:hover {
-  background-color: #1e293b;
+  background-color: #35162e;
   color: white;
 }
 
@@ -88,14 +88,13 @@
 
 .auction-title {
   font-size: 1.1rem;
-  color: #1e293b;
+  color: #35162e;
 }
 
 .auction-description {
   color: #64748b;
   font-size: 0.9rem;
   line-height: 1.5;
-  /* Limit to 3 lines */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -146,7 +145,7 @@
 .price-value {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #1e293b;
+  color: #35162e;
 }
 
 .auction-meta {

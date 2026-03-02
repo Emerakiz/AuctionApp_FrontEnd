@@ -9,7 +9,7 @@
 }
 
 .back-btn:hover {
-  color: #1e293b;
+  color: #35162e;
 }
 
 .auction-detail-grid {
@@ -55,7 +55,7 @@
 .current-price {
   font-size: 1.3rem;
   font-weight: bold;
-  color: #1e293b;
+  color: #35162e;
 }
 
 .owner-controls {
@@ -73,7 +73,7 @@
 
 .place-bid h3 {
   margin-bottom: 1rem;
-  color: #1e293b;
+  color: #35162e;
 }
 
 .bid-input-row {
@@ -91,7 +91,7 @@
 
 .bid-input:focus {
   outline: none;
-  border-color: #1e293b;
+  border-color: #35162e;
 }
 
 .bid-btn {
@@ -124,7 +124,7 @@
 
 .bid-user {
   font-weight: bold;
-  color: #1e293b;
+  color: #35162e;
   font-size: 0.95rem;
 }
 
@@ -141,7 +141,7 @@
 
 .bid-amount {
   font-weight: bold;
-  color: #1e293b;
+  color: #35162e;
   font-size: 1.1rem;
 }
 
@@ -168,7 +168,7 @@
 .winning-amount {
   font-size: 2rem;
   font-weight: bold;
-  color: #1e293b;
+  color: #35162e;
 }
 
 .winning-user {
@@ -183,7 +183,7 @@
 }
 
 .link {
-  color: #1e293b;
+  color: #35162e;
   font-weight: bold;
   cursor: pointer;
   text-decoration: underline;
