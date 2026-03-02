@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
+import type { User } from '../types';
 
 const Login = () => {
   const { login } = useAuth();
@@ -14,11 +15,11 @@ const Login = () => {
   });
   const [error, setError] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     try {
@@ -26,12 +27,14 @@ const Login = () => {
       const token = response.data.token;
 
       const payload = JSON.parse(atob(token.split('.')[1]));
-      const userData = {
-        id: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
-        username: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-        isAdmin: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role'] === 'Admin',
-      };
 
+      const userData: User = {
+      id: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+      username: payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+      isAdmin: payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin',
+    };
+
+      
       login(userData, token);
       navigate('/');
     } catch (err) {
@@ -46,7 +49,7 @@ const Login = () => {
 
         {error && <p className='error-msg'>{error}</p>}
 
-        <div className='form'>
+        <form className='form' onSubmit={handleSubmit}>
           <div className='form-field'>
             <label>Username</label>
             <input
@@ -67,8 +70,8 @@ const Login = () => {
             />
           </div>
 
-          <button className='btn-primary' onClick={handleSubmit}>Login</button>
-        </div>
+          <button className='btn-primary' type='submit'>Login</button>
+        </form>
       </div>
     </div>
   );

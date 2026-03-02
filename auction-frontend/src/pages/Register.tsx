@@ -7,29 +7,42 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+ 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    try {
-      await api.post('/User/register', formData);
-      setSuccess('Account created! Redirecting to login...');
-      setTimeout(() => navigate('/login'), 2000);
-    } catch (err) {
-      setError(err.response?.data || 'Registration failed, please try again');
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+  e.preventDefault();
+  setError('');
+  setSuccess('');
+  try {
+    await api.post('/User/register', formData);
+    setSuccess('Account created! Redirecting to login...');
+    setTimeout(() => navigate('/login'), 2000);
+  } catch (err) {
+  const error = err as { response?: { data?: unknown } };
+  const data = error.response?.data;
+  
+  if (typeof data === 'string') {
+    setError(data);
+  } else if (data && typeof data === 'object') {
+    const validationErrors = (data as { errors?: Record<string, string[]> }).errors;
+    if (validationErrors) {
+      const messages = Object.values(validationErrors).flat().join(', ');
+      setError(messages);
+    } else {
+      setError('Registration failed, please try again');
     }
-  };
+  } else {
+    setError('Registration failed, please try again');
+  }
+}
+};
 
   return (
     <div className='login-container'>
@@ -44,9 +57,9 @@ const Register = () => {
             <label>Username</label>
             <input
               type='text'
-              name='username'
-              value={formData.username}
-              onChange={handleChange}
+              name='name'
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
 
@@ -56,7 +69,7 @@ const Register = () => {
               type='email'
               name='email'
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
 
@@ -66,7 +79,7 @@ const Register = () => {
               type='password'
               name='password'
               value={formData.password}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
           </div>
 

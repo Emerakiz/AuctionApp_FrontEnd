@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <nav className='navbar'>
-      <div className='navbar-brand'>🔨 AuctionApp</div>
+      <div className='navbar-brand'>AuctionApp</div>
 
       <button className='navbar-toggle' onClick={() => setMenuOpen(!menuOpen)}>
         <span /><span /><span />

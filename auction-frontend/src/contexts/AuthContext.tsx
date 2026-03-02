@@ -1,23 +1,27 @@
 import { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
+import type { User } from '../types';
 
-// Global state container
-const AuthContext = createContext();
+interface AuthContextType {
+  user: User | null;
+  login: (userData: User, token: string) => void;
+  logout: () => void;
+}
 
-// Provides auth state and functions to the app
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => { // Initialize from localStorage if available
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(() => {
     const stored = localStorage.getItem('user');
     return stored ? JSON.parse(stored) : null;
   });
 
-  // Save user data and token on login
-  const login = (userData, token) => {
+  const login = (userData: User, token: string) => {
     localStorage.setItem('accessToken', token);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
 
-  // Clear user data and token on logout
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('user');

@@ -22,12 +22,12 @@ const CreateAuction = () => {
     return null;
   }
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
     setError('');
 
     if (!formData.title || !formData.description || !formData.startingPrice) {
@@ -48,7 +48,7 @@ const CreateAuction = () => {
         startingPrice: parseFloat(formData.startingPrice),
       });
       navigate('/');
-    } catch (err) {
+    } catch (err: any) {
       setError(err.response?.data || 'Failed to create auction');
     } finally {
       setLoading(false);

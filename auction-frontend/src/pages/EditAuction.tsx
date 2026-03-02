@@ -19,7 +19,6 @@ const EditAuction = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Redirect if not logged in
   if (!user) {
     navigate('/login');
     return null;
@@ -35,7 +34,6 @@ const EditAuction = () => {
 
         const auction = auctionRes.data;
 
-        // Redirect if not the owner
         if (String(auction.userId) !== String(user.id)) {
           navigate('/');
           return;
@@ -58,11 +56,11 @@ const EditAuction = () => {
     fetchData();
   }, [id]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -85,7 +83,8 @@ const EditAuction = () => {
       });
       navigate(`/auction/${id}`);
     } catch (err) {
-      setError(err.response?.data || 'Failed to update auction');
+      const error = err as { response?: { data?: string } };
+      setError(error.response?.data || 'Failed to update auction');
     } finally {
       setSaving(false);
     }
@@ -103,13 +102,7 @@ const EditAuction = () => {
 
           {error && <p className='error-msg'>{error}</p>}
 
-          {hasBids && (
-            <div className='info-msg'>
-              ⚠️ This auction has bids — the starting price cannot be changed.
-            </div>
-          )}
-
-          <div className='form'>
+          <form className='form' onSubmit={handleSubmit}>
             <div className='form-field'>
               <label>Title</label>
               <input
@@ -134,34 +127,46 @@ const EditAuction = () => {
 
             <div className='form-field'>
               <label>Starting Price (kr)</label>
-              <input
-                type='number'
-                name='startingPrice'
-                value={formData.startingPrice}
-                onChange={handleChange}
-                placeholder='0'
-                min='1'
-                disabled={hasBids}
-                className={hasBids ? 'input-disabled' : ''}
-              />
+              {hasBids ? (
+                <>
+                  <input
+                    type='number'
+                    name='startingPrice'
+                    value={formData.startingPrice}
+                    className='input-disabled'
+                    disabled
+                  />
+                  <p className='field-warning'>⚠️ Price cannot be changed once bids have been placed.</p>
+                </>
+              ) : (
+                <input
+                  type='number'
+                  name='startingPrice'
+                  value={formData.startingPrice}
+                  onChange={handleChange}
+                  placeholder='0'
+                  min='1'
+                />
+              )}
             </div>
 
             <div className='form-buttons'>
               <button
                 className='btn-secondary'
+                type='button'
                 onClick={() => navigate(`/auction/${id}`)}
               >
                 Cancel
               </button>
               <button
                 className='btn-primary'
-                onClick={handleSubmit}
+                type='submit'
                 disabled={saving}
               >
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

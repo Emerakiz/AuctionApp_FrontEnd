@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import type { Auction } from '../types';
 import './Home.css';
 
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [auctions, setAuctions] = useState([]);
+  const [auctions, setAuctions] = useState<Auction[]>([]);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('active');
   const [error, setError] = useState('');
@@ -34,20 +35,32 @@ const Home = () => {
     fetchAuctions();
   }, [status]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    fetchAuctions();
+  const handleSearch = (e: React.SyntheticEvent) => {
+  e.preventDefault();
+  fetchAuctions();
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('sv-SE', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setTick(t => t + 1), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+ 
+
+  const getCountdown = (endDate: string): string => {
+  const diff = new Date(endDate).getTime() - new Date().getTime();
+  if (diff <= 0) return 'Ended';
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (days > 0) return `${days}d left`;
+  if (hours > 0) return `${hours}h left`;
+  return `${minutes}m left`;
+};
 
   return (
     <div className='container'>
@@ -134,7 +147,7 @@ const Home = () => {
                 </div>
                 <div className='auction-meta'>
                   <span>By {auction.userName}</span>
-                  <span>Ends: {formatDate(auction.endDate)}</span>
+                  <span>Ends in: {getCountdown(auction.endDate)}</span>
                 </div>
               </div>
             </div>
@@ -144,3 +157,5 @@ const Home = () => {
     </div>
   );
 };
+
+export default Home;

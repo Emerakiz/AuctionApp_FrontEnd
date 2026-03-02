@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import type { Auction, UserDTO } from '../types';
 import './Admin.css';
 
 const Admin = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [auctions, setAuctions] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [auctions, setAuctions] = useState<Auction[]>([]);
+  const [users, setUsers] = useState<UserDTO[]>([]);
   const [activeTab, setActiveTab] = useState('auctions');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -26,13 +27,14 @@ const Admin = () => {
     setError('');
     try {
       const [auctionsRes, usersRes] = await Promise.all([
-        api.get('/Auction', { params: { status: 'all' } }),
+        api.get('/Auction', { params: { status: 'admin' } }),
         api.get('/User'),
       ]);
       setAuctions(auctionsRes.data);
       setUsers(usersRes.data);
     } catch (err) {
-      setError('Failed to load data');
+      const error = err as { response?: { data?: string } };
+      setError(error.response?.data || 'Failed to load data');
     } finally {
       setLoading(false);
     }
@@ -42,31 +44,37 @@ const Admin = () => {
     fetchData();
   }, []);
 
-  const handleDisableAuction = async (auctionId) => {
-    setError('');
-    setSuccess('');
-    try {
-      await api.put(`/Admin/auction/${auctionId}`);
-      setSuccess('Auction status updated');
-      fetchData();
-    } catch (err) {
-      setError(err.response?.data || 'Failed to update auction');
-    }
-  };
+  const handleDisableAuction = async (auctionId: number) => {
+  setError('');
+  setSuccess('');
+  try {
+    await api.put(`/Admin/auction/${auctionId}`);
+    setSuccess('Auction status updated');
+    setAuctions(prev => prev.map(a => 
+      a.auctionId === auctionId ? { ...a, isActive: !a.isActive } : a
+    ));
+  } catch (err) {
+    const error = err as { response?: { data?: string } };
+    setError(error.response?.data || 'Something went wrong');
+  }
+};
 
-  const handleDisableUser = async (userId) => {
-    setError('');
-    setSuccess('');
-    try {
-      await api.put(`/Admin/user/${userId}`);
-      setSuccess('User status updated');
-      fetchData();
-    } catch (err) {
-      setError(err.response?.data || 'Failed to update user');
-    }
-  };
+  const handleDisableUser = async (userId: number) => {
+  setError('');
+  setSuccess('');
+  try {
+    await api.put(`/Admin/user/${userId}`);
+    setSuccess('User status updated');
+    setUsers(prev => prev.map(u =>
+      u.userId === userId ? { ...u, isActive: !u.isActive } : u
+    ));
+  } catch (err) {
+    const error = err as { response?: { data?: string } };
+    setError(error.response?.data || 'Something went wrong');
+  }
+};
 
-  const handleDeleteAuction = async (auctionId) => {
+  const handleDeleteAuction = async (auctionId: number) => {
     setError('');
     setSuccess('');
     try {
@@ -74,11 +82,12 @@ const Admin = () => {
       setSuccess('Auction deleted');
       fetchData();
     } catch (err) {
-      setError(err.response?.data || 'Failed to delete auction');
+      const error = err as { response?: { data?: string } };
+      setError(error.response?.data || 'Something went wrong');
     }
   };
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = async (userId: number) => {
     setError('');
     setSuccess('');
     try {
@@ -86,11 +95,12 @@ const Admin = () => {
       setSuccess('User deleted');
       fetchData();
     } catch (err) {
-      setError(err.response?.data || 'Failed to delete user');
+      const error = err as { response?: { data?: string } };
+      setError(error.response?.data || 'Something went wrong');
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('sv-SE', {
       year: 'numeric',
       month: 'short',
@@ -107,7 +117,6 @@ const Admin = () => {
       {error && <p className='error-msg'>{error}</p>}
       {success && <p className='success-msg'>{success}</p>}
 
-      {/* Tabs */}
       <div className='admin-tabs'>
         <button
           className={`tab-btn ${activeTab === 'auctions' ? 'active' : ''}`}
@@ -123,7 +132,6 @@ const Admin = () => {
         </button>
       </div>
 
-      {/* Auctions tab */}
       {activeTab === 'auctions' && (
         <div className='card'>
           <table className='admin-table'>
@@ -175,13 +183,12 @@ const Admin = () => {
         </div>
       )}
 
-      {/* Users tab */}
       {activeTab === 'users' && (
         <div className='card'>
           <table className='admin-table'>
             <thead>
               <tr>
-                <th>Username</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
@@ -191,7 +198,7 @@ const Admin = () => {
             <tbody>
               {users.map((u) => (
                 <tr key={u.userId}>
-                  <td>{u.username}</td>
+                  <td>{u.name}</td>
                   <td>{u.email}</td>
                   <td>{u.isAdmin ? 'Admin' : 'User'}</td>
                   <td>
