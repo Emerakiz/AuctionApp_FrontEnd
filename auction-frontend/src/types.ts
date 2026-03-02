@@ -1,10 +1,5 @@
-export interface UserDTO {
-  userId: number;
-  name: string;
-  email: string;
-  isAdmin: boolean;
-  isActive: boolean;
-}
+
+
 
 export interface User {
   id: number;
@@ -35,7 +30,7 @@ export interface Bid {
 
 export interface UserDTO {
   userId: number;
-  username: string;
+  name: string;
   email: string;
   isAdmin: boolean;
   isActive: boolean;
