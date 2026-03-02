@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import UpdateUser from './pages/UpdateUser';
 import AuctionDetail from './pages/AuctionDetail';
 import CreateAuction from './pages/CreateAuction';
 import EditAuction from './pages/EditAuction';
@@ -20,6 +21,7 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/update-account' element={<UpdateUser />} />
           <Route path='/auction/:id' element={<AuctionDetail />} />
           <Route path='/create-auction' element={<CreateAuction />} />
           <Route path='/edit-auction/:id' element={<EditAuction />} />
