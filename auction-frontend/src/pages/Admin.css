@@ -1,0 +1,110 @@
+.admin-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  border: 2px solid #1e293b;
+  background-color: white;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background-color: #1e293b;
+  color: white;
+}
+
+.tab-btn:hover {
+  background-color: #1e293b;
+  color: white;
+}
+
+/* Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: bold;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.admin-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+.table-link {
+  cursor: pointer;
+  color: #1e293b;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.table-link:hover {
+  color: #475569;
+}
+
+.action-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-btn {
+  width: auto;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* Badge reuse */
+.auction-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.badge-open {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.badge-closed {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+  }
+}

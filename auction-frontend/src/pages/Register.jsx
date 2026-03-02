@@ -1,0 +1,86 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router';
+import api from '../services/api';
+import './Register.css';
+
+const Register = () => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    try {
+      await api.post('/User/register', formData);
+      setSuccess('Account created! Redirecting to login...');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      setError(err.response?.data || 'Registration failed, please try again');
+    }
+  };
+
+  return (
+    <div className='login-container'>
+      <div className='login-card'>
+        <h2>Create Account</h2>
+
+        {error && <p className='error-msg'>{error}</p>}
+        {success && <p className='success-msg'>{success}</p>}
+
+        <div className='form'>
+          <div className='form-field'>
+            <label>Username</label>
+            <input
+              type='text'
+              name='username'
+              value={formData.username}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className='form-field'>
+            <label>Email</label>
+            <input
+              type='email'
+              name='email'
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className='form-field'>
+            <label>Password</label>
+            <input
+              type='password'
+              name='password'
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+
+          <button className='btn-primary' onClick={handleSubmit}>
+            Register
+          </button>
+
+          <p style={{ textAlign: 'center', color: '#475569', fontSize: '0.9rem' }}>
+            Already have an account? <Link to='/login' style={{ color: '#1e293b' }}>Login here</Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Register;
