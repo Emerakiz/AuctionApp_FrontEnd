@@ -9,6 +9,7 @@ import AuctionDetail from './pages/AuctionDetail';
 import CreateAuction from './pages/CreateAuction';
 import EditAuction from './pages/EditAuction';
 import Admin from './pages/Admin';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   return (
@@ -21,11 +22,11 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/update-account' element={<UpdateUser />} />
+          <Route path='/update-account' element={<ProtectedRoute><UpdateUser /></ProtectedRoute>} />
           <Route path='/auction/:id' element={<AuctionDetail />} />
-          <Route path='/create-auction' element={<CreateAuction />} />
-          <Route path='/edit-auction/:id' element={<EditAuction />} />
-          <Route path='/admin' element={<Admin />} />
+          <Route path='/create-auction' element={<ProtectedRoute><CreateAuction /></ProtectedRoute>} />
+          <Route path='/edit-auction/:id' element={<ProtectedRoute><EditAuction /></ProtectedRoute>} />
+          <Route path='/admin' element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
